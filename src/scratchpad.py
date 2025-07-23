@@ -24,20 +24,20 @@ siem_api_client = HuntressSIEMAPIClient(
 #agents = siem_api_client.agents.get()
 #print(agents)
 
-billingreports = siem_api_client.billing_reports.get()
-print(billingreports)
+#billingreports = siem_api_client.billing_reports.get()
+#print(billingreports)
 
-incidentreports = siem_api_client.incident_reports.get()
-print(incidentreports)
+#incidentreports = siem_api_client.incident_reports.get()
+#print(incidentreports)
 
-organizations = siem_api_client.organizations.get()
-print(organizations)
+#organizations = siem_api_client.organizations.get()
+#print(organizations)
 
-reports = siem_api_client.reports.get()
-print(reports)
+#reports = siem_api_client.reports.get()
+#print(reports)
 
-signals = siem_api_client.signals.get()
-print(signals)
+#signals = siem_api_client.signals.get()
+#print(signals)
 
 #paginated_agents = siem_api_client.agents.paginated(1, 10)
 #print(paginated_agents)
