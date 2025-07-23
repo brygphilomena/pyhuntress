@@ -3,7 +3,7 @@ from pyhuntress.interfaces import (
     IGettable,
     IPaginateable,
 )
-from pyhuntress.models.siem import SIEMAgentsResponse, SIEMAgents
+from pyhuntress.models.siem import SIEMAgents
 from pyhuntress.responses.paginated_response import PaginatedResponse
 from pyhuntress.types import (
     JSON,
@@ -18,8 +18,8 @@ class AgentsEndpoint(
 ):
     def __init__(self, client, parent_endpoint=None) -> None:
         HuntressEndpoint.__init__(self, client, "agents", parent_endpoint=parent_endpoint)
-        IGettable.__init__(self, SIEMAgentsResponse)
-        IPaginateable.__init__(self, SIEMAgentsResponse)
+        IGettable.__init__(self, SIEMAgents)
+        IPaginateable.__init__(self, SIEMAgents)
 
     def id(self, id: int) -> HuntressEndpoint:
         """
@@ -48,17 +48,18 @@ class AgentsEndpoint(
             limit (int): The number of results to return per page.
             params (dict[str, int | str]): The parameters to send in the request query string.
         Returns:
-            PaginatedResponse[SIEMAgentsResponse]: The initialized PaginatedResponse object.
+            PaginatedResponse[SIEMAgents]: The initialized PaginatedResponse object.
         """
         if params:
             params["page"] = page
-            params["pageSize"] = limit
+            params["limit"] = limit
         else:
-            params = {"page": page, "pageSize": limit}
+            params = {"page": page, "limit": limit}
         return PaginatedResponse(
             super()._make_request("GET", params=params),
             SIEMAgents,
             self,
+            "agents",
             page,
             limit,
             params,

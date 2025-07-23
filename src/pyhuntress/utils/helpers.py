@@ -1,4 +1,5 @@
 import re
+import math
 from datetime import datetime
 from typing import Any
 
@@ -23,8 +24,84 @@ def cw_format_datetime(dt: datetime) -> str:
     """
     return dt.strftime("%Y-%m-%dT%H:%M:%SZ")
 
+def parse_response_body(
+    body: CaseInsensitiveDict,
+) -> dict[str, Any] | None:
+    """
+    Parses response body to extract pagination information.
 
-def parse_link_headers(  # noqa: C901
+    Arguments:
+    - body: content.json().get('pagination', {}) A dictionary containing the headers of an HTTP response.
+
+    Returns:
+    - A dictionary containing the extracted pagination information. The keys in the dictionary include:
+      - "first_page": An optional integer representing the number of the first page.
+      - "prev_page": An optional integer representing the number of the previous page.
+      - "next_page": An optional integer representing the number of the next page.
+      - "last_page": An optional integer representing the number of the last page.
+      - "has_next_page": A boolean indicating whether there is a next page.
+      - "has_prev_page": A boolean indicating whether there is a previous page.
+
+    If the "Link" header is not present in the headers dictionary, None is returned.
+
+    Example Usage:
+        headers = {
+            "Link": '<https://example.com/api?page=1>; rel="first", <https://example.com/api?page=2>; rel="next"'
+        }
+        pagination_info = parse_link_headers(headers)
+        print(pagination_info)
+        # Output: {'first_page': 1, 'next_page': 2, 'has_next_page': True}
+    """
+    if body.get("current_page") is None:
+        return None
+    has_next_page: bool = False
+    has_prev_page: bool = False
+    first_page: int | None = None
+    prev_page: int | None = None
+    current_page: int | None = None
+    current_page_count: int | None = None
+    limit: int | None = None
+    total_count: int | None = None
+    next_page: int | None = None
+    next_page_url: str | None = None
+    next_page_token: str | None = None
+    last_page: int | None = None
+
+    result = {}
+
+    if first_page is not None:
+        result["first_page"] = first_page
+
+    if prev_page is not None:
+        result["prev_page"] = prev_page
+    elif current_page is not None:
+        if current_page > 1:
+            result["prev_page"] = current_page - 1
+
+    if next_page is not None:
+        result["next_page"] = next_page
+
+    if last_page is not None:
+        result["last_page"] = last_page
+    elif last_page is None and current_page is not None:
+        result["last_page"] = math.ceil(total_count/limit)
+
+    if has_next_page:
+        result["has_next_page"] = has_next_page
+    elif current_page is not None and next_page is not None:
+        result["has_next_page"] = True
+    elif current_page is not None and next_page is None:
+        result["has_next_page"] = False
+
+    if has_prev_page:
+        result["has_prev_page"] = has_prev_page
+    elif current_page is not None:
+        if current_page > 1:
+            result["has_prev_page"] = True
+
+    return result
+    
+def parse_link_headers(
     headers: CaseInsensitiveDict,
 ) -> dict[str, Any] | None:
     """

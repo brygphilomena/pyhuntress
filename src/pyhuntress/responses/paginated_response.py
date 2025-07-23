@@ -1,8 +1,9 @@
 from __future__ import annotations
+import json
 
 from typing import TYPE_CHECKING, Generic, TypeVar
 
-from pyhuntress.utils.helpers import parse_link_headers
+from pyhuntress.utils.helpers import parse_link_headers, parse_response_body
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -38,9 +39,10 @@ class PaginatedResponse(Generic[TModel]):
         self,
         response: Response,
         response_model: type[TModel],
-        endpoint: IPaginateable,
+        endpointmodel: IPaginateable,
+        endpoint: str,
         page: int,
-        page_size: int,
+        limit: int,
         params: RequestParams | None = None,
     ) -> None:
         """
@@ -56,40 +58,44 @@ class PaginatedResponse(Generic[TModel]):
         expected model type for the response data. This allows for type-safe handling
         of model instances throughout the class.
         """
-        self._initialize(response, response_model, endpoint, page, page_size, params)
+        self._initialize(response, response_model, endpointmodel, endpoint, page, limit, params)
 
-    def _initialize(  # noqa: ANN202
+    def _initialize(
         self,
         response: Response,
         response_model: type[TModel],
-        endpoint: IPaginateable,
+        endpointmodel: IPaginateable,
+        endpoint: str,
         page: int,
-        page_size: int,
+        limit: int,
         params: RequestParams | None = None,
     ):
         """
-        Initialize the instance variables using the provided response, endpoint, and page size.
+        Initialize the instance variables using the provided response, endpointmodel, and page size.
 
         Args:
             response: The raw response object from the API.
-            endpoint (HuntressEndpoint[TModel]): The endpoint associated with the response.
-            page_size (int): The number of items per page.
+            endpointmodel (HuntressEndpoint[TModel]): The endpointmodel associated with the response.
+            endpoint: The endpoint url to extract the data
+            limit (int): The number of items per page.
         """
         self.response = response
         self.response_model = response_model
+        self.endpointmodel = endpointmodel
         self.endpoint = endpoint
-        self.page_size = page_size
+        self.limit = limit
+        print(self.endpoint)
         # The following for SIEM is in the response body, not the headers
-        self.parsed_pagination_response = None #parse_link_headers(response.headers)
+        self.parsed_pagination_response = parse_response_body(json.loads(response.content.decode('utf-8')).get('pagination', {}))
         self.params = params
         if self.parsed_pagination_response is not None:
             # Huntress SIEM API gives us a handy response to parse for Pagination
-            self.has_next_page: bool = self.parsed_link_headers.get("has_next_page", False)
-            self.has_prev_page: bool = self.parsed_link_headers.get("has_prev_page", False)
-            self.first_page: int = self.parsed_link_headers.get("first_page", None)
-            self.prev_page: int = self.parsed_link_headers.get("prev_page", None)
-            self.next_page: int = self.parsed_link_headers.get("next_page", None)
-            self.last_page: int = self.parsed_link_headers.get("last_page", None)
+            self.has_next_page: bool = self.parsed_pagination_response.get("has_next_page", False)
+            self.has_prev_page: bool = self.parsed_pagination_response.get("has_prev_page", False)
+            self.first_page: int = self.parsed_pagination_response.get("first_page", None)
+            self.prev_page: int = self.parsed_pagination_response.get("prev_page", None)
+            self.next_page: int = self.parsed_pagination_response.get("next_page", None)
+            self.last_page: int = self.parsed_pagination_response.get("last_page", None)
         else:
             # Huntress Managed SAT might, haven't worked on this yet
             self.has_next_page: bool = True
@@ -98,7 +104,7 @@ class PaginatedResponse(Generic[TModel]):
             self.prev_page = page - 1 if page > 1 else 1
             self.next_page = page + 1
             self.last_page = 999999
-        self.data: list[TModel] = [response_model.model_validate(d) for d in response.json()]
+        self.data: list[TModel] = [response_model.model_validate(d) for d in response.json().get(endpoint, {})]
         self.has_data = self.data and len(self.data) > 0
         self.index = 0
 
@@ -114,13 +120,13 @@ class PaginatedResponse(Generic[TModel]):
             self.has_data = False
             return self
 
-        next_response = self.endpoint.paginated(self.next_page, self.page_size, self.params)
+        next_response = self.endpointmodel.paginated(self.next_page, self.limit, self.params)
         self._initialize(
             next_response.response,
             next_response.response_model,
-            next_response.endpoint,
+            next_response.endpointmodel,
             self.next_page,
-            next_response.page_size,
+            next_response.limit,
             self.params,
         )
         return self
@@ -137,18 +143,18 @@ class PaginatedResponse(Generic[TModel]):
             self.has_data = False
             return self
 
-        prev_response = self.endpoint.paginated(self.prev_page, self.page_size, self.params)
+        prev_response = self.endpointmodel.paginated(self.prev_page, self.limit, self.params)
         self._initialize(
             prev_response.response,
             prev_response.response_model,
-            prev_response.endpoint,
+            prev_response.endpointmodel,
             self.prev_page,
-            prev_response.page_size,
+            prev_response.limit,
             self.params,
         )
         return self
 
-    def all(self) -> Iterable[TModel]:  # noqa: A003
+    def all(self) -> Iterable[TModel]:
         """
         Iterate through all items in the paginated response, across all pages.
 
@@ -159,7 +165,7 @@ class PaginatedResponse(Generic[TModel]):
             yield from self.data
             self.get_next_page()
 
-    def __iter__(self):  # noqa: ANN204
+    def __iter__(self):
         """
         Implement the iterator protocol for the PaginatedResponse class.
 
@@ -168,7 +174,7 @@ class PaginatedResponse(Generic[TModel]):
         """
         return self
 
-    def __dict__(self):  # noqa: ANN204
+    def __dict__(self):
         """
         Implement the iterator protocol for the PaginatedResponse class.
 
@@ -177,7 +183,7 @@ class PaginatedResponse(Generic[TModel]):
         """
         return self.data
 
-    def __next__(self):  # noqa: ANN204
+    def __next__(self):
         """
         Implement the iterator protocol by getting the next item in the data.
 
@@ -191,5 +197,5 @@ class PaginatedResponse(Generic[TModel]):
             result = self.data[self.index]
             self.index += 1
             return result
-        else:  # noqa: RET505
+        else:
             raise StopIteration
