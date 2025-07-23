@@ -69,34 +69,34 @@ def parse_response_body(
 
     result = {}
 
-    if first_page is not None:
-        result["first_page"] = first_page
+    if body.get("first_page") is not None:
+        result["first_page"] = body.get("first_page")
 
-    if prev_page is not None:
-        result["prev_page"] = prev_page
-    elif current_page is not None:
-        if current_page > 1:
-            result["prev_page"] = current_page - 1
+    if body.get("prev_page") is not None:
+        result["prev_page"] = body.get("prev_page")
+    elif body.get("current_page") is not None:
+        if body.get("current_page") > 1:
+            result["prev_page"] = body.get("current_page") - 1
 
-    if next_page is not None:
-        result["next_page"] = next_page
+    if body.get("next_page") is not None:
+        result["next_page"] = body.get("next_page")
 
-    if last_page is not None:
-        result["last_page"] = last_page
-    elif last_page is None and current_page is not None:
-        result["last_page"] = math.ceil(total_count/limit)
+    if body.get("last_page") is not None:
+        result["last_page"] = body.get("last_page")
+    elif body.get("last_page") is None and body.get("current_page") is not None:
+        result["last_page"] = math.ceil(body.get("total_count")/body.get("limit"))
 
-    if has_next_page:
-        result["has_next_page"] = has_next_page
-    elif current_page is not None and next_page is not None:
+    if body.get("has_next_page"):
+        result["has_next_page"] = body.get("has_next_page")
+    elif body.get("current_page") is not None and body.get("next_page") is not None:
         result["has_next_page"] = True
-    elif current_page is not None and next_page is None:
+    elif body.get("current_page") is not None and body.get("next_page") is None:
         result["has_next_page"] = False
 
-    if has_prev_page:
-        result["has_prev_page"] = has_prev_page
-    elif current_page is not None:
-        if current_page > 1:
+    if body.get("has_prev_page"):
+        result["has_prev_page"] = body.get("has_prev_page")
+    elif body.get("current_page") is not None:
+        if body.get("current_page") > 1:
             result["has_prev_page"] = True
 
     return result

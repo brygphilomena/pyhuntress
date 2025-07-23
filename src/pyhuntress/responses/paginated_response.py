@@ -84,7 +84,6 @@ class PaginatedResponse(Generic[TModel]):
         self.endpointmodel = endpointmodel
         self.endpoint = endpoint
         self.limit = limit
-        print(self.endpoint)
         # The following for SIEM is in the response body, not the headers
         self.parsed_pagination_response = parse_response_body(json.loads(response.content.decode('utf-8')).get('pagination', {}))
         self.params = params
@@ -125,6 +124,7 @@ class PaginatedResponse(Generic[TModel]):
             next_response.response,
             next_response.response_model,
             next_response.endpointmodel,
+            next_response.endpoint,
             self.next_page,
             next_response.limit,
             self.params,
