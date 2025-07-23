@@ -18,7 +18,6 @@ Known Issues:
 =============
 - As this project is still a WIP, documentation or code commentary may not always align.
 - Huntress Managed SAT is not built
-- Pagination does not work
 
 Road Map:
 =============
