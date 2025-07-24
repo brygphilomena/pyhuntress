@@ -1,0 +1,37 @@
+[project]
+name = "pyhuntress"
+version = "0.1.1"
+authors = [
+  { name="Peter Annabel", email="peter.annabel@gmail.com" },
+]
+description = "A full-featured Python client for the Huntress APIs"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.10",
+]
+keywords = [
+    "Huntress",
+    "Manages SAT",
+    "SIEM",
+    "API",
+    "Python",
+    "Client",
+    "Annotated",
+    "Typed",
+    "MSP",
+]
+license = "GPL-3.0-only"
+license-files = ["LICEN[CS]E*"]
+
+[project.urls]
+Homepage = "https://github.com/brygphilomena/pyhuntress"
+Issues = "https://github.com/brygphilomena/pyhuntress/issues"
+
+[build-system]
+requires = ["hatchling >= 1.26"]
+build-backend = "hatchling.build"

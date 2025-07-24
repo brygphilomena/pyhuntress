@@ -21,7 +21,7 @@ class SIEMAgents(HuntressModel):
     id: int | None = Field(default=None, alias="Id")
     version: str | None = Field(default=None, alias="Version")
     arch: str | None = Field(default=None, alias="Arch")
-    win_build_number: str | None = Field(default=None, alias="WinBuildNumber")
+    win_build_number: int | None = Field(default=None, alias="WinBuildNumber")
     domain_name: str | None = Field(default=None, alias="DomainName")
     created_at: datetime | None = Field(default=None, alias="CreateAt")
     hostname: str | None = Field(default=None, alias="Hostname")
@@ -62,7 +62,10 @@ class SIEMAccount(HuntressModel):
     id: int | None = Field(default=None, alias="Id")
     name: str | None = Field(default=None, alias="Name")
     subdomain: str | None = Field(default=None, alias="Subdomain")
-    status: str | None = Field(default=None, alias="Status")
+    status: Literal[
+        "enabled",
+        "disabled",
+    ] | None = Field(default=None, alias="Status")
 
 class SIEMActorResponse(HuntressModel):
     account: dict[str, Any] | None = Field(default=None, alias="Account")
@@ -217,12 +220,14 @@ class SIEMReports(HuntressModel):
     itdr_incidents_reported: int | None = Field(default=None, alias="ITDRIncidentsReported")
     siem_incidents_reported: int | None = Field(default=None, alias="SIEMIncidentsReported")
     incidents_resolved: int | None = Field(default=None, alias="IncidentsResolved")
+    # The following 3 counts are listed as "map" in Huntress' docs, I'm not sure what data type to use here
     incident_severity_counts: int | None = Field(default=None, alias="IncidentSeverityCounts")
     incident_product_counts: int | None = Field(default=None, alias="IncidentProductCounts")
     incident_indicator_counts: int | None = Field(default=None, alias="IncidentIndicatorCounts")
     top_incident_av_threats: list | None = Field(default=None, alias="TopIncidentAVThreats")
+    # top_incident_hosts is also listed as "map" in their docs
     top_incident_hosts: list | None = Field(default=None, alias="TopIncidentHosts")
-    potential_threat_indicators: list | None = Field(default=None, alias="PotentialThreatIndicators")
+    potential_threat_indicators: int | None = Field(default=None, alias="PotentialThreatIndicators")
     agents_count: int | None = Field(default=None, alias="AgentsCount")
     deployed_canaries_count: int | None = Field(default=None, alias="DeployedCanariesCount")
     protected_profiles_count: int | None = Field(default=None, alias="ProtectedProfilesCount")
@@ -232,6 +237,8 @@ class SIEMReports(HuntressModel):
     analyst_note: str | None = Field(default=None, alias="AnalystNote")
     global_threats_note: str | None = Field(default=None, alias="GlobalThreatsNote")
     ransomware_note: str | None = Field(default=None, alias="RansomwareNote")
+    # Huntress has incident_log listed as "complex" with the note "A JSON representation of any critical
+    # or high severity incidents from this report"
     incident_log: str | None = Field(default=None, alias="IncidentLog")
     total_mav_detection_count: int | None = Field(default=None, alias="TotalMAVDetectionCount")
     blocked_malware_count: int | None = Field(default=None, alias="BlockedMalwareCount")
@@ -245,9 +252,9 @@ class SIEMReports(HuntressModel):
     itdr_signals: int | None = Field(default=None, alias="ITDRSignals")
     siem_signals: int | None = Field(default=None, alias="SIEMSignals")
     itdr_investigations_completed: int | None = Field(default=None, alias="ITDRInvestigationsCompleted")
-    macos_agents: str | None = Field(default=None, alias="MacOSAgents")
-    windows_agents: str | None = Field(default=None, alias="WindowsAgents")
-    only_macos_agents: str | None = Field(default=None, alias="OnlyMacOSAgents")
+    macos_agents: bool | None = Field(default=None, alias="MacOSAgents")
+    windows_agents: bool | None = Field(default=None, alias="WindowsAgents")
+    only_macos_agents: bool | None = Field(default=None, alias="OnlyMacOSAgents")
     antivirus_exclusions_count: int | None = Field(default=None, alias="AntivirusExclusionsCount")
     new_exclusions_count: int | None = Field(default=None, alias="NewExclusionsCount")
     allowed_exclusions_count: int | None = Field(default=None, alias="AllowedExclusionsCount")

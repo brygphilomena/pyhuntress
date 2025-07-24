@@ -71,7 +71,7 @@ siem_api_client = HuntressSIEMAPIClient(
 Endpoints are 1:1 to what's available for both the Huntress Managed SAT and Huntress SIEM.
 
 For more information, check out the following resources:
-- [Huntress Managed SAT REST API Docs](https://support.meetgradient.com/huntress-managed-sat)
+- [Huntress Managed SAT REST API Docs](https://curricula.stoplight.io/docs/curricula-api/00fkcnpgk5vnn-getting-started)
 - [Huntress SIEM REST API Docs](https://api.huntress.io/docs)
 
 ### Get many
