@@ -1,4 +1,5 @@
 from pyhuntress.endpoints.base.huntress_endpoint import HuntressEndpoint
+from pyhuntress.endpoints.siem.IncidentreportsIdEndpoint import IncidentreportsIdEndpoint
 from pyhuntress.interfaces import (
     IGettable,
     IPaginateable,
@@ -21,16 +22,16 @@ class IncidentreportsEndpoint(
         IGettable.__init__(self, SIEMIncidentReports)
         IPaginateable.__init__(self, SIEMIncidentReports)
 
-    def id(self, id: int) -> HuntressEndpoint:
+    def id(self, id: int) -> IncidentreportsIdEndpoint:
         """
-        Sets the ID for this endpoint and returns an initialized HuntressEndpoint object to move down the chain.
+        Sets the ID for this endpoint and returns an initialized IncidentreportsIdEndpoint object to move down the chain.
 
         Parameters:
             id (int): The ID to set.
         Returns:
-            HuntressEndpoint: The initialized HuntressEndpoint object.
+            IncidentreportsIdEndpoint: The initialized IncidentreportsIdEndpoint object.
         """
-        child = HuntressEndpoint(self.client, parent_endpoint=self)
+        child = IncidentreportsIdEndpoint(self.client, parent_endpoint=self)
         child._id = id
         return child
 

@@ -1,5 +1,4 @@
 from pyhuntress.endpoints.base.huntress_endpoint import HuntressEndpoint
-from pyhuntress.endpoints.siem.ReportsIdEndpoint import ReportsIdEndpoint
 from pyhuntress.interfaces import (
     IGettable,
     IPaginateable,
@@ -12,28 +11,15 @@ from pyhuntress.types import (
 )
 
 
-class ReportsEndpoint(
+class ReportsIdEndpoint(
     HuntressEndpoint,
     IGettable[SIEMReports, HuntressSIEMRequestParams],
     IPaginateable[SIEMReports, HuntressSIEMRequestParams],
 ):
     def __init__(self, client, parent_endpoint=None) -> None:
-        HuntressEndpoint.__init__(self, client, "reports", parent_endpoint=parent_endpoint)
+        HuntressEndpoint.__init__(self, client, "{id}", parent_endpoint=parent_endpoint)
         IGettable.__init__(self, SIEMReports)
         IPaginateable.__init__(self, SIEMReports)
-
-    def id(self, id: int) -> ReportsIdEndpoint:
-        """
-        Sets the ID for this endpoint and returns an initialized ReportsIdEndpoint object to move down the chain.
-
-        Parameters:
-            id (int): The ID to set.
-        Returns:
-            ReportsIdEndpoint: The initialized ReportsIdEndpoint object.
-        """
-        child = ReportsIdEndpoint(self.client, parent_endpoint=self)
-        child._id = id
-        return child
 
     def paginated(
         self,
@@ -80,7 +66,7 @@ class ReportsEndpoint(
         Returns:
             SIEMAuthInformation: The parsed response data.
         """
-        return self._parse_many(
+        return self._parse_one(
             SIEMReports,
-            super()._make_request("GET", data=data, params=params).json().get('reports', {}),
+            super()._make_request("GET", data=data, params=params).json().get('report', {}),
         )
