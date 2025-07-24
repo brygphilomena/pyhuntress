@@ -37,15 +37,16 @@ class HuntressClient(ABC):
     def _get_url(self) -> str:
         pass
 
-    def _make_request(  # noqa: C901
+    def _make_request(
         self,
         method: RequestMethod,
         url: str,
         data: RequestData | None = None,
+        rawdata: RequestData | None = None,
         params: RequestParams | None = None,
         headers: dict[str, str] | None = None,
         retry_count: int = 0,
-        stream: bool = False,  # noqa: FBT001, FBT002
+        stream: bool = False,
     ) -> Response:
         """
         Make an API request using the specified method, endpoint, data, and parameters.
@@ -76,6 +77,15 @@ class HuntressClient(ABC):
                 url,
                 headers=headers,
                 json=data,
+                params=cast(dict[str, Any], params or {}),
+                stream=stream,
+            )
+        elif rawdata:
+            response = requests.request(
+                method,
+                url,
+                headers=headers,
+                data=rawdata,
                 params=cast(dict[str, Any], params or {}),
                 stream=stream,
             )

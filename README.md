@@ -92,7 +92,7 @@ agents = siem_api_client.agents.get()
 ### Managed SAT ###
 
 # sends GET request to /company/companies/{id} endpoint
-company = sat_api_client.company.companies.id(250).get()
+accounts = sat_api_client.accounts.id("abc123").get()
 
 ### SIEM ###
 
