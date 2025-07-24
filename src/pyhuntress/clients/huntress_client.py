@@ -42,6 +42,7 @@ class HuntressClient(ABC):
         method: RequestMethod,
         url: str,
         data: RequestData | None = None,
+#        rawdata: RequestData | None = None,
         params: RequestParams | None = None,
         headers: dict[str, str] | None = None,
         retry_count: int = 0,
@@ -75,10 +76,19 @@ class HuntressClient(ABC):
                 method,
                 url,
                 headers=headers,
-                json=data,
+                data=data,
                 params=cast(dict[str, Any], params or {}),
                 stream=stream,
             )
+#        elif rawdata:
+#            response = requests.request(
+#                method,
+#                url,
+#                headers=headers,
+#                data=rawdata,
+#                params=cast(dict[str, Any], params or {}),
+#                stream=stream,
+#            )
         else:
             response = requests.request(
                 method,

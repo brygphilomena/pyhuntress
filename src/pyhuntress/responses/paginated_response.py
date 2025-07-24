@@ -84,8 +84,11 @@ class PaginatedResponse(Generic[TModel]):
         self.endpointmodel = endpointmodel
         self.endpoint = endpoint
         self.limit = limit
-        # The following for SIEM is in the response body, not the headers
-        self.parsed_pagination_response = parse_response_body(json.loads(response.content.decode('utf-8')).get('pagination', {}))
+        # Get page data from the response body
+        try:
+            self.parsed_pagination_response = parse_response_body(json.loads(response.content.decode('utf-8')).get('pagination', {}))
+        except:
+            self.parsed_pagination_response = parse_response_body(json.loads(response.content.decode('utf-8')).get('meta.page', {}))
         self.params = params
         if self.parsed_pagination_response is not None:
             # Huntress SIEM API gives us a handy response to parse for Pagination
