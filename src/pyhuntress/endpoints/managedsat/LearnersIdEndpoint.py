@@ -38,10 +38,10 @@ class LearnersIdEndpoint(
             PaginatedResponse[SATLearners]: The initialized PaginatedResponse object.
         """
         if params:
-            params["page"] = page
-            params["limit"] = limit
+            params["page[number]"] = page
+            params["page[size]"] = limit
         else:
-            params = {"page": page, "limit": limit}
+            params = {"page[number]": page, "page[size]": limit}
         return PaginatedResponse(
             super()._make_request("GET", params=params),
             SATLearners,

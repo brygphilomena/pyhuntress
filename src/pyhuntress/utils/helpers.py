@@ -77,12 +77,19 @@ def parse_response_body(
     elif body.get("current_page") is not None:
         if body.get("current_page") > 1:
             result["prev_page"] = body.get("current_page") - 1
+    elif body.get("currentPage") is not None:
+        if body.get("currentPage") > 1:
+            result["prev_page"] = body.get("currentPage") - 1
 
     if body.get("next_page") is not None:
         result["next_page"] = body.get("next_page")
+    elif body.get("currentPage") is not None and body.get("currentPage") < body.get("lastPage"):
+        result["next_page"] = body.get("currentPage") + 1
 
     if body.get("last_page") is not None:
         result["last_page"] = body.get("last_page")
+    elif body.get("lastPage") is not None:
+        result["last_page"] = body.get("lastPage")
     elif body.get("last_page") is None and body.get("current_page") is not None:
         result["last_page"] = math.ceil(body.get("total_count")/body.get("limit"))
 
@@ -92,11 +99,16 @@ def parse_response_body(
         result["has_next_page"] = True
     elif body.get("current_page") is not None and body.get("next_page") is None:
         result["has_next_page"] = False
-
+    elif body.get("currentPage") is not None and body.get("currentPage") < body.get("lastPage"):
+        result["has_next_page"] = True
+    
     if body.get("has_prev_page"):
         result["has_prev_page"] = body.get("has_prev_page")
     elif body.get("current_page") is not None:
         if body.get("current_page") > 1:
+            result["has_prev_page"] = True
+    elif body.get("currentPage") is not None:
+        if body.get("currentPage") > 1:
             result["has_prev_page"] = True
 
     return result

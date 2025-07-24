@@ -135,7 +135,7 @@ class HuntressSATAPIClient(HuntressClient):
         auth_response = self._make_request(
             "POST",
             token_url,
-            rawdata={
+            data={
                 "grant_type": "client_credentials",
                 "client_id": self.client_id,
                 "client_secret": self.client_secret,
