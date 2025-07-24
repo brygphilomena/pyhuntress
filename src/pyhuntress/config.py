@@ -1,5 +1,5 @@
 class Config:
-    def __init__(self, max_retries=3) -> None:  # noqa: ANN001
+    def __init__(self, max_retries=3) -> None:
         """
         Initializes a new instance of the Config class.
 

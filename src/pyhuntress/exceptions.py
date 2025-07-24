@@ -5,7 +5,7 @@ from urllib.parse import urlsplit, urlunsplit
 from requests import JSONDecodeError, Response
 
 
-class HuntressException(Exception):  # noqa: N818
+class HuntressException(Exception):
     _code_explanation: ClassVar[str] = ""  # Ex: for 404 "Not Found"
     _error_suggestion: ClassVar[str] = ""  # Ex: for 404 "Check the URL you are using is correct"
 
