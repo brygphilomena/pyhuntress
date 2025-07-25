@@ -220,13 +220,11 @@ class SIEMReports(HuntressModel):
     itdr_incidents_reported: int | None = Field(default=None, alias="ITDRIncidentsReported")
     siem_incidents_reported: int | None = Field(default=None, alias="SIEMIncidentsReported")
     incidents_resolved: int | None = Field(default=None, alias="IncidentsResolved")
-    # The following 3 counts are listed as "map" in Huntress' docs, I'm not sure what data type to use here
-    incident_severity_counts: int | None = Field(default=None, alias="IncidentSeverityCounts")
-    incident_product_counts: int | None = Field(default=None, alias="IncidentProductCounts")
-    incident_indicator_counts: int | None = Field(default=None, alias="IncidentIndicatorCounts")
+    incident_severity_counts: dict[str, int] | None = Field(default=None, alias="IncidentSeverityCounts")
+    incident_product_counts: dict[str, int] | None = Field(default=None, alias="IncidentProductCounts")
+    incident_indicator_counts: dict[str, int] | None = Field(default=None, alias="IncidentIndicatorCounts")
     top_incident_av_threats: list | None = Field(default=None, alias="TopIncidentAVThreats")
-    # top_incident_hosts is also listed as "map" in their docs
-    top_incident_hosts: list | None = Field(default=None, alias="TopIncidentHosts")
+    top_incident_hosts: dict[str, Any] | None = Field(default=None, alias="TopIncidentHosts")
     potential_threat_indicators: int | None = Field(default=None, alias="PotentialThreatIndicators")
     agents_count: int | None = Field(default=None, alias="AgentsCount")
     deployed_canaries_count: int | None = Field(default=None, alias="DeployedCanariesCount")

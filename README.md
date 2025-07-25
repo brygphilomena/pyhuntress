@@ -17,11 +17,12 @@ pyHuntress is currently in **development**.
 Known Issues:
 =============
 - As this project is still a WIP, documentation or code commentary may not always align.
-- Huntress Managed SAT is not built
+- Huntress Managed SAT post not built
 
 Road Map:
 =============
-- Add Huntress Managed SAT Report
+- Add support for post
+- Add required parameters when calling completion_certificat endpoint
 
 How-to:
 =============

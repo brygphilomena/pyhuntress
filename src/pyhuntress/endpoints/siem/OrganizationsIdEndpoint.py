@@ -1,10 +1,8 @@
 from pyhuntress.endpoints.base.huntress_endpoint import HuntressEndpoint
 from pyhuntress.interfaces import (
     IGettable,
-    IPaginateable,
 )
 from pyhuntress.models.siem import SIEMOrganizations
-from pyhuntress.responses.paginated_response import PaginatedResponse
 from pyhuntress.types import (
     JSON,
     HuntressSIEMRequestParams,
@@ -14,43 +12,10 @@ from pyhuntress.types import (
 class OrganizationsIdEndpoint(
     HuntressEndpoint,
     IGettable[SIEMOrganizations, HuntressSIEMRequestParams],
-    IPaginateable[SIEMOrganizations, HuntressSIEMRequestParams],
 ):
     def __init__(self, client, parent_endpoint=None) -> None:
         HuntressEndpoint.__init__(self, client, "{id}", parent_endpoint=parent_endpoint)
         IGettable.__init__(self, SIEMOrganizations)
-        IPaginateable.__init__(self, SIEMOrganizations)
-
-    def paginated(
-        self,
-        page: int,
-        limit: int,
-        params: HuntressSIEMRequestParams | None = None,
-    ) -> PaginatedResponse[SIEMOrganizations]:
-        """
-        Performs a GET request against the /organizations endpoint and returns an initialized PaginatedResponse object.
-
-        Parameters:
-            page (int): The page number to request.
-            limit (int): The number of results to return per page.
-            params (dict[str, int | str]): The parameters to send in the request query string.
-        Returns:
-            PaginatedResponse[SIEMOrganizations]: The initialized PaginatedResponse object.
-        """
-        if params:
-            params["page"] = page
-            params["limit"] = limit
-        else:
-            params = {"page": page, "limit": limit}
-        return PaginatedResponse(
-            super()._make_request("GET", params=params),
-            SIEMOrganizations,
-            self,
-            "organizations",
-            page,
-            limit,
-            params,
-        )
 
     def get(
         self,
@@ -58,7 +23,7 @@ class OrganizationsIdEndpoint(
         params: HuntressSIEMRequestParams | None = None,
     ) -> SIEMOrganizations:
         """
-        Performs a GET request against the /organizations endpoint.
+        Performs a GET request against the /organizations/{id} endpoint.
 
         Parameters:
             data (dict[str, Any]): The data to send in the request body.
