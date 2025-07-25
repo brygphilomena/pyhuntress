@@ -24,7 +24,6 @@ class HuntressSIEMAPIClient(HuntressClient):
 
     def __init__(
         self,
-        siem_url: str,
         publickey: str,
         privatekey: str,
     ) -> None:
@@ -32,11 +31,9 @@ class HuntressSIEMAPIClient(HuntressClient):
         Initializes the client with the given credentials.
 
         Parameters:
-            siem_url (str): URL of your Huntress SIEM instance.
             publickey (str): Your Huntress SIEM API public key.
             privatekey (str): Your Huntress SIEM API private key.
         """
-        self.siem_url: str = siem_url
         self.publickey: str = publickey
         self.privatekey: str = privatekey
         self.token_expiry_time: datetime = datetime.now(tz=timezone.utc)
@@ -100,7 +97,7 @@ class HuntressSIEMAPIClient(HuntressClient):
         Returns:
             str: API URL.
         """
-        return f"https://{self.siem_url}/v1"
+        return f"https://api.huntress.io/v1"
 
     def _get_auth_key(self) -> str:
         """

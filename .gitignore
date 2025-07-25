@@ -209,3 +209,4 @@ __marimo__/
 # Development files
 managedsat_scratchpad.py
 siem_scratchpad.py
+.vscode/settings.json
