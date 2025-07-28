@@ -1,6 +1,6 @@
 [project]
 name = "pyhuntress"
-version = "0.1.1"
+version = "0.2.2"
 authors = [
   { name="Peter Annabel", email="peter.annabel@gmail.com" },
 ]
@@ -27,11 +27,15 @@ keywords = [
 ]
 license = "GPL-3.0-only"
 license-files = ["LICEN[CS]E*"]
+dynamic = ["dependencies"]
 
 [project.urls]
 Homepage = "https://github.com/brygphilomena/pyhuntress"
 Issues = "https://github.com/brygphilomena/pyhuntress/issues"
 
 [build-system]
-requires = ["hatchling >= 1.26"]
+requires = ["hatchling >= 1.26", "hatch-requirements-txt"]
 build-backend = "hatchling.build"
+
+[tool.hatch.metadata.hooks.requirements_txt]
+files = ["requirements.txt"]

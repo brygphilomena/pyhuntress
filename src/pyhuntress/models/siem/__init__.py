@@ -237,7 +237,7 @@ class SIEMReports(HuntressModel):
     ransomware_note: str | None = Field(default=None, alias="RansomwareNote")
     # Huntress has incident_log listed as "complex" with the note "A JSON representation of any critical
     # or high severity incidents from this report"
-    incident_log: str | None = Field(default=None, alias="IncidentLog")
+    incident_log: list[dict[str, Any]] | None = Field(default=None, alias="IncidentLog")
     total_mav_detection_count: int | None = Field(default=None, alias="TotalMAVDetectionCount")
     blocked_malware_count: int | None = Field(default=None, alias="BlockedMalwareCount")
     investigated_mav_detection_count: int | None = Field(default=None, alias="InvestigatedMAVDetectionCount")
