@@ -224,7 +224,7 @@ class SIEMReports(HuntressModel):
     incident_product_counts: dict[str, int] | None = Field(default=None, alias="IncidentProductCounts")
     incident_indicator_counts: dict[str, int] | None = Field(default=None, alias="IncidentIndicatorCounts")
     top_incident_av_threats: list | None = Field(default=None, alias="TopIncidentAVThreats")
-    top_incident_hosts: dict[str, Any] | None = Field(default=None, alias="TopIncidentHosts")
+    top_incident_hosts: list | None = Field(default=None, alias="TopIncidentHosts")
     potential_threat_indicators: int | None = Field(default=None, alias="PotentialThreatIndicators")
     agents_count: int | None = Field(default=None, alias="AgentsCount")
     deployed_canaries_count: int | None = Field(default=None, alias="DeployedCanariesCount")
@@ -235,8 +235,6 @@ class SIEMReports(HuntressModel):
     analyst_note: str | None = Field(default=None, alias="AnalystNote")
     global_threats_note: str | None = Field(default=None, alias="GlobalThreatsNote")
     ransomware_note: str | None = Field(default=None, alias="RansomwareNote")
-    # Huntress has incident_log listed as "complex" with the note "A JSON representation of any critical
-    # or high severity incidents from this report"
     incident_log: list[dict[str, Any]] | None = Field(default=None, alias="IncidentLog")
     total_mav_detection_count: int | None = Field(default=None, alias="TotalMAVDetectionCount")
     blocked_malware_count: int | None = Field(default=None, alias="BlockedMalwareCount")
