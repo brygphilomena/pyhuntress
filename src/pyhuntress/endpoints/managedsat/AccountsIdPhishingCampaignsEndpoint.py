@@ -17,7 +17,7 @@ class AccountsIdPhishingCampaignsEndpoint(
     IPaginateable[SATPhishingCampaigns, HuntressSATRequestParams],
 ):
     def __init__(self, client, parent_endpoint=None) -> None:
-        HuntressEndpoint.__init__(self, client, "phishing_campaigns", parent_endpoint=parent_endpoint)
+        HuntressEndpoint.__init__(self, client, "phishing-campaigns", parent_endpoint=parent_endpoint)
         IGettable.__init__(self, SATPhishingCampaigns)
         IPaginateable.__init__(self, SATPhishingCampaigns)
 
