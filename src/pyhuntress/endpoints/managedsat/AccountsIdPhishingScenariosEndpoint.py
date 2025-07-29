@@ -10,7 +10,7 @@ from pyhuntress.types import (
     HuntressSATRequestParams,
 )
 
-
+# THIS ENDPOINT RETURNS ABSOLUTELY NOTHING. DO NOT USE
 class AccountsIdPhishingScenariosEndpoint(
     HuntressEndpoint,
     IGettable[SATPhishingScenarios, HuntressSATRequestParams],
