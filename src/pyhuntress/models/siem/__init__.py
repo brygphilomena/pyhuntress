@@ -224,7 +224,7 @@ class SIEMReports(HuntressModel):
     incident_product_counts: dict[str, int] | None = Field(default=None, alias="IncidentProductCounts")
     incident_indicator_counts: dict[str, int] | None = Field(default=None, alias="IncidentIndicatorCounts")
     top_incident_av_threats: list | None = Field(default=None, alias="TopIncidentAVThreats")
-    top_incident_hosts: list | None = Field(default=None, alias="TopIncidentHosts")
+    top_incident_hosts: Any | None = Field(default=None, alias="TopIncidentHosts") #Huntress seems inconsistent between list and dict here
     potential_threat_indicators: int | None = Field(default=None, alias="PotentialThreatIndicators")
     agents_count: int | None = Field(default=None, alias="AgentsCount")
     deployed_canaries_count: int | None = Field(default=None, alias="DeployedCanariesCount")

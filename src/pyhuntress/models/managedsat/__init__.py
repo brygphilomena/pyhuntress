@@ -126,7 +126,7 @@ class SATPhishingCampaigns(HuntressModel):
 
 class SATPhishingScenarios(HuntressModel):
     type: Literal[
-        "phishing-campaign-scenarios",
+        "phishing-scenarios",
         ] | None = Field(default=None, alias="Type")
     id: str | None = Field(default=None, alias="Id")
     attributes: dict[str, Any] | None = Field(default=None, alias="Attributes")
