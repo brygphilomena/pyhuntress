@@ -1,6 +1,6 @@
 [project]
 name = "pyhuntress"
-version = "0.2.12"
+version = "0.2.13"
 authors = [
   { name="Peter Annabel", email="peter.annabel@gmail.com" },
 ]
