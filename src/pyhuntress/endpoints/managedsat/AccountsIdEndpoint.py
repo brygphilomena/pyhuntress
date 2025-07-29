@@ -36,6 +36,37 @@ class AccountsIdEndpoint(
         self.phishing_campaigns = self._register_child_endpoint(AccountsIdPhishingCampaignsEndpoint(client, parent_endpoint=self))
         self.phishing_scenarios = self._register_child_endpoint(AccountsIdPhishingScenariosEndpoint(client, parent_endpoint=self))
 
+    def paginated(
+        self,
+        page: int,
+        limit: int,
+        params: HuntressSATRequestParams | None = None,
+    ) -> PaginatedResponse[SATAccounts]:
+        """
+        Performs a GET request against the /accounts/{id} endpoint and returns an initialized PaginatedResponse object.
+
+        Parameters:
+            page (int): The page number to request.
+            limit (int): The number of results to return per page.
+            params (dict[str, int | str]): The parameters to send in the request query string.
+        Returns:
+            PaginatedResponse[SATAccounts]: The initialized PaginatedResponse object.
+        """
+        if params:
+            params["page[number]"] = page
+            params["page[size]"] = limit
+        else:
+            params = {"page[number]": page, "page[size]": limit}
+        return PaginatedResponse(
+            super()._make_request("GET", params=params),
+            SATAccounts,
+            self,
+            "data",
+            page,
+            limit,
+            params,
+        )
+
     def get(
         self,
         data: JSON | None = None,

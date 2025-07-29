@@ -22,7 +22,7 @@ class AccountsEndpoint(
         IGettable.__init__(self, SATAccounts)
         IPaginateable.__init__(self, SATAccounts)
 
-    def id(self, id: int) -> AccountsIdEndpoint:
+    def id(self, id: str) -> AccountsIdEndpoint:
         """
         Sets the ID for this endpoint and returns an initialized AccountsIdEndpoint object to move down the chain.
 
