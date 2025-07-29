@@ -19,6 +19,7 @@ class PhishingCampaignsIdCampaignScenariosEndpoint(
     def __init__(self, client, parent_endpoint=None) -> None:
         HuntressEndpoint.__init__(self, client, "campaign-scenarios", parent_endpoint=parent_endpoint)
         IGettable.__init__(self, SATPhishingScenarios)
+        IPaginateable.__init__(self, SATPhishingScenarios)
 
     def paginated(
         self,
@@ -27,7 +28,7 @@ class PhishingCampaignsIdCampaignScenariosEndpoint(
         params: HuntressSATRequestParams | None = None,
     ) -> PaginatedResponse[SATPhishingScenarios]:
         """
-        Performs a GET request against the /phishing-campaigns/{id}/phishing-scenarios endpoint and returns an initialized PaginatedResponse object.
+        Performs a GET request against the /phishing-campaigns/{id}/campaign-scenarios endpoint and returns an initialized PaginatedResponse object.
 
         Parameters:
             page (int): The page number to request.
@@ -56,9 +57,7 @@ class PhishingCampaignsIdCampaignScenariosEndpoint(
         data: JSON | None = None,
         params: HuntressSATRequestParams | None = None,
     ) -> SATPhishingScenarios:
-        
-        # TODO: Make this require the learnerid as a parameter
-        
+                
         """
         Performs a GET request against the /phishing-campaigns/{id}/campaign-scenarios endpoint.
 
