@@ -75,6 +75,10 @@ class ConflictException(HuntressException):
     _code_explanation = "Conflict"
     _error_suggestion = "This resource is possibly in use or conflicts with another record."
 
+class TooManyRequestsException(HuntressException):
+    _code_explanation = "Too Many Requests"
+    _error_suggestion = "This resource is currently being rate limited. Please wait and try again."
+
 
 class ServerError(HuntressException):
     _code_explanation = "Internal Server Error"

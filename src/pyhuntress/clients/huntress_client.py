@@ -20,6 +20,7 @@ from pyhuntress.exceptions import (
     ObjectExistsError,
     PermissionsFailedException,
     ServerError,
+    TooManyRequestsException,
 )
 
 if TYPE_CHECKING:
@@ -80,15 +81,6 @@ class HuntressClient(ABC):
                 params=cast(dict[str, Any], params or {}),
                 stream=stream,
             )
-#        elif rawdata:
-#            response = requests.request(
-#                method,
-#                url,
-#                headers=headers,
-#                data=rawdata,
-#                params=cast(dict[str, Any], params or {}),
-#                stream=stream,
-#            )
         else:
             response = requests.request(
                 method,
@@ -100,7 +92,7 @@ class HuntressClient(ABC):
         if not response.ok:
             with contextlib.suppress(json.JSONDecodeError):
                 details: dict = response.json()
-                if response.status_code == 400:  # noqa: SIM102 (Expecting to handle other codes in the future)
+                if response.status_code == 400:
                     if details.get("code") == "InvalidObject":
                         errors = details.get("errors", [])
                         if len(errors) > 1:
@@ -125,6 +117,8 @@ class HuntressClient(ABC):
                 raise MethodNotAllowedException(response)
             if response.status_code == 409:
                 raise ConflictException(response)
+            if response.status_code == 429:
+                raise TooManyRequestsException(response)
             if response.status_code == 500:
                 # if timeout is mentioned anywhere in the response then we'll retry.
                 # Ideally we'd return immediately on any non-timeout errors (since
