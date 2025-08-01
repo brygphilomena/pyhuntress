@@ -141,7 +141,7 @@ class SATPhishingCampaignAttempts(HuntressModel):
         ] | None = Field(default=None, alias="Type")
     id: str | None = Field(default=None, alias="Id")
     attributes: dict[str, Any] | None = Field(default=None, alias="Attributes")
-    relationships: dict[str, dict[str, dict[str, str]]] | None = Field(default=None, alias="Relationships")
+    relationships: dict[str, dict[str, Any]] | None = Field(default=None, alias="Relationships")
     links: dict[str, str] | None = Field(default=None, alias="Links")
     meta: dict[str, dict[str, int]] | None = Field(default=None, alias="Meta")
 
