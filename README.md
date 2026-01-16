@@ -154,3 +154,7 @@ Contributions to the project are welcome. If you find any issues or have suggest
 
 # Inspiration and Stolen Code
 The premise behind this came from the [pyConnectWise](https://github.com/HealthITAU/pyconnectwise) package and I stole **most** of the code and adapted it to the Huntress API endpoints.
+
+# How to Build
+> python -m build
+> python -m twine upload dist/*
