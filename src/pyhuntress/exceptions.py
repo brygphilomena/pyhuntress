@@ -87,3 +87,7 @@ class ServerError(HuntressException):
 class ObjectExistsError(HuntressException):
     _code_explanation = "Object Exists"
     _error_suggestion = "This resource already exists."
+
+class RequestTimedOutException(HuntressException):
+    _code_explanation = "Request Timed Out"
+    _error_suggestion = "This resource is possibly busy or not responding. Try again later or use a smaller request."

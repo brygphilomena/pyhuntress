@@ -21,6 +21,7 @@ from pyhuntress.exceptions import (
     PermissionsFailedException,
     ServerError,
     TooManyRequestsException,
+    RequestTimedOutException,
 )
 
 if TYPE_CHECKING:
@@ -77,6 +78,7 @@ class HuntressClient(ABC):
                 method,
                 url,
                 headers=headers,
+                timeout=180,
                 data=data,
                 params=cast(dict[str, Any], params or {}),
                 stream=stream,
@@ -86,6 +88,7 @@ class HuntressClient(ABC):
                 method,
                 url,
                 headers=headers,
+                timeout=180,
                 params=cast(dict[str, Any], params or {}),
                 stream=stream,
             )
@@ -130,5 +133,7 @@ class HuntressClient(ABC):
                         return self._make_request(method, url, data, params, headers, retry_count)
                     raise Timeout(response=response)
                 raise ServerError(response)
+            if response.status_code == 504:
+                raise RequestTimedOutException(response)
 
         return response
