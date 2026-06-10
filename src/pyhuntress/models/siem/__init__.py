@@ -123,7 +123,7 @@ class SIEMIncidentReports(HuntressModel):
     sent_at: datetime | None = Field(default=None, alias="SentAt")
     account_id: int | None = Field(default=None, alias="AccountId")
     subject: str | None = Field(default=None, alias="Subject")
-    remediations: list[dict[str, Any]] | None = Field(default=None, alias="Remediations")
+    remediations: dict[str, Any] | None = Field(default=None, alias="Remediations")
     severity: Literal[
         "low",
         "high",
